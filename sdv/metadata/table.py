@@ -712,9 +712,16 @@ class Table:
                 field_data = pd.Series(Table._get_fake_values(field_metadata, len(reversed_data)))
             else:
                 field_data = reversed_data[name]
+#             import time    
+            if field_metadata['transformer'] == 'integer':
+                field_data = field_data.round(5)
+#             print ('xxxxxxxxx-------------------------------', field_metadata)
+#             print ('xxxxxxxxx-------------------------------', field_data)
 
             reversed_data[name] = field_data[field_data.notnull()].astype(self._dtypes[name])
-
+#             time.sleep(3600)
+            
+#         print ('xxxxxxxxx-------------------------------',reversed_data, self._field_names)
         return reversed_data[self._field_names]
 
     def filter_valid(self, data):

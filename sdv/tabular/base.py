@@ -192,6 +192,7 @@ class BaseTabularModel:
             pandas.DataFrame:
                 Rows from the sampled data that match the conditions.
         """
+#         print ('_filter_conditions...sampled',sampled.head())
         for column, value in conditions.items():
             column_values = sampled[column]
             if column_values.dtype.kind == 'f':
@@ -245,9 +246,9 @@ class BaseTabularModel:
                     sampled = self._sample(num_rows, transformed_conditions)
                 except NotImplementedError:
                     sampled = self._sample(num_rows)
-
+#             print ('sampled...before reverse',sampled)
             sampled = self._metadata.reverse_transform(sampled)
-
+#             print ('sampled...after reverse',sampled)
             if previous_rows is not None:
                 sampled = pd.concat([previous_rows, sampled], ignore_index=True)
 

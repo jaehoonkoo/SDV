@@ -236,6 +236,7 @@ class UniqueCombinations(Constraint):
             pandas.DataFrame:
                 Transformed data.
         """
+        print('.......UniqueCombinations......reserver')
         table_data = table_data.copy()
         columns = table_data.pop(self._joint_column).map(self._uuids_to_combinations)
 
@@ -532,7 +533,7 @@ class GreaterThan(Constraint):
                 table_data.loc[invalid, column] = new_values[:, i].astype(self._dtype[i])
 
         table_data = table_data.drop(self._diff_columns, axis=1)
-
+#         print('.......GraterThan......reserver')
         return table_data
 
 
@@ -683,6 +684,7 @@ class ColumnFormula(Constraint):
             pandas.DataFrame:
                 Transformed data.
         """
+        print('.......ColumnFormula......reserver')
         table_data = table_data.copy()
         table_data[self._column] = self._formula(table_data)
 
@@ -869,16 +871,16 @@ class Between(Constraint):
                 Transformed data.
         """
         table_data = table_data.copy()
-        low = self._get_low_value(table_data)
-        high = self._get_high_value(table_data)
-
+        low  = float(self._get_low_value(table_data))
+        high = float(self._get_high_value(table_data))
+        
         data = (table_data[self.constraint_column] - low) / (high - low)
         data = data * 0.95 + 0.025
         data = np.log(data / (1.0 - data))
-
         table_data[self._transformed_column] = data
+        
         table_data = table_data.drop(self.constraint_column, axis=1)
-
+        
         return table_data
 
     def reverse_transform(self, table_data):
@@ -897,22 +899,19 @@ class Between(Constraint):
                 Transformed data.
         """
         table_data = table_data.copy()
-        low = self._get_low_value(table_data)
-        high = self._get_high_value(table_data)
+        low = float(self._get_low_value(table_data))
+        high = float(self._get_high_value(table_data))
         data = table_data[self._transformed_column]
-
-        data = 1 / (1 + np.exp(-data))
+        data = 1.0 / (1.0 + np.exp(-data))
         data = (data - 0.025) / 0.95
         data = data * (high - low) + low
         data = data.clip(low, high)
-
+        
         if self._is_datetime:
             table_data[self.constraint_column] = pd.to_datetime(data)
         else:
             table_data[self.constraint_column] = data
-
         table_data = table_data.drop(self._transformed_column, axis=1)
-
         return table_data
 
 
@@ -980,6 +979,7 @@ class Rounding(Constraint):
             pandas.DataFrame:
                 Transformed data.
         """
+        print('.......OneHot......reserver')
         return table_data.round(self._round_config)
 
 
@@ -1116,7 +1116,7 @@ class OneHotEncoding(Constraint):
         transformed_data = np.zeros_like(one_hot_data.values)
         transformed_data[np.arange(len(one_hot_data)), np.argmax(one_hot_data.values, axis=1)] = 1
         table_data[self._columns] = transformed_data
-
+        print('.......OneHot......reserver')
         return table_data
 
 

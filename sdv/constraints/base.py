@@ -167,6 +167,7 @@ class Constraint(metaclass=ConstraintMeta):
             num_rows=num_rows,
             conditions=conditions
         )
+
         sampled = self._hyper_transformer.reverse_transform(sampled)
         valid_rows = sampled[self.is_valid(sampled)]
         counter = 0
@@ -195,6 +196,7 @@ class Constraint(metaclass=ConstraintMeta):
                 num_rows=num_to_sample,
                 conditions=conditions
             )
+
             new_sampled = self._hyper_transformer.reverse_transform(new_sampled)
             new_valid_rows = new_sampled[self.is_valid(new_sampled)]
             valid_rows = pd.concat([valid_rows, new_valid_rows], ignore_index=True)
@@ -305,6 +307,7 @@ class Constraint(metaclass=ConstraintMeta):
             pandas.DataFrame:
                 Input data unmodified.
         """
+
         return table_data
 
     def is_valid(self, table_data):
